@@ -2,33 +2,42 @@ import discord
 import asyncio
 from discord.ext import commands
 
-# Criação do bot com o prefixo "!"
+# Configuração do bot
 intents = discord.Intents.default()
-intents.message_content = True  # Permite ler o conteúdo das mensagens
-bot = commands.Bot(command_prefix='!', intents=intents)
+bot = commands.Bot(command_prefix="!", intents=intents)
 
-# Lista de status que o bot vai exibir
-status_messages = [
-    'Craft Survival CFS',
-    'Craft Survival CFS',
-    'Craft Survival CFS',
-    'Craft Survival CFS',
+# Lista de status para alternar a cada 5 segundos
+status_list = [
+    "Jogando Craft Survival CFS",
+    "Explorando o servidor!",
+    "Aventuras no mundo CFS!",
+    "Desbravando terras desconhecidas!"
 ]
-
-# Função para atualizar o status a cada 5 segundos
-async def update_status():
-    while True:
-        for status_message in status_messages:
-            activity = discord.Game(name=status_message)  # Status "Jogando"
-            await bot.change_presence(activity=activity)  # Muda o status
-            await asyncio.sleep(5)  # Espera 5 segundos antes de mudar novamente
 
 @bot.event
 async def on_ready():
-    print(f'Bot {bot.user} está online!')
+    print(f"✅ Bot {bot.user} está online!")
 
-    # Inicia a atualização de status em paralelo
+    # 🔹 Loop para atualizar o status a cada 5 segundos
+    async def update_status():
+        while True:
+            for status in status_list:
+                await bot.change_presence(activity=discord.Game(name=status))  # Status "Jogando"
+                await asyncio.sleep(5)  # Aguarda 5 segundos antes de mudar novamente
+
     bot.loop.create_task(update_status())
 
-# Inicie o bot com o token
-bot.run('MTMyOTMwNzE1Mjc0OTE3MDgwMg.G5BaUH.GQcVKp-FA4n6HmAMnYtTCdz9uvy-WQ_fk514zQ')  # Substitua 'SEU_TOKEN_AQUI' pelo seu token de bot
+# 🔹 Comando para mostrar o status do bot (Apenas para quem tem o cargo "☯ ⌞Fundador⌝ ☯")
+@bot.command()
+async def status(ctx):
+    role_name = "☯ ⌞Fundador⌝ ☯"  # Nome exato do cargo necessário
+
+    # Verifica se o usuário tem o cargo
+    if any(role.name == role_name for role in ctx.author.roles):
+        current_status = ctx.me.activity.name if ctx.me.activity else "Nenhum status definido"
+        await ctx.send(f"📢 **Status atual do bot:** `{current_status}`")
+    else:
+        await ctx.send("❌ **Você não tem permissão para usar este comando!**")
+
+# 🔹 Iniciar o bot (adicione o token manualmente ao rodar o script)
+bot.run("SEU_TOKEN_AQUI")
