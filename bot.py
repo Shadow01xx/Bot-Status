@@ -56,4 +56,4 @@ async def status(ctx):
         await ctx.send("❌ **Você não tem permissão para usar este comando!**")
 
 # 🔹 Iniciar o bot (adicione o token manualmente ao rodar o script)
-bot.run("MTMyOTMwNzE1Mjc0OTE3MDgwMg.Gn8fvO.sqrRq2fOmMUhgNd77jvToZrbRHRM1cIGiS12zM")
+bot.run("MTMyOTMwNzE1Mjc0OTE3MDgwMg.Gpc5Wn.VBHGZOv7YAggkgDoVgcIRUy6Q1v-mgwST4V5gs")
